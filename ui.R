@@ -16,7 +16,7 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
     fluidRow(
       column(3,
         selectInput("loc_variable", "", var.labels, var.labels[1]),
-        checkboxInput("loc_deltas", "Display deltas", FALSE)
+        checkboxInput("loc_deltas", "Display deltas", TRUE)
       ),
       column(3,
         selectInput("loc_rcp", "", rcp.labels, rcp.labels[1]),
@@ -39,22 +39,22 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
   div(class="outer",
   tags$head(includeCSS("www/styles.css")),
   leafletOutput("Map", width="100%", height="100%"),
-  absolutePanel(top=20, left=60, height=20, width=600, h4("Northwest Territories Future Climate Outlook")),
+  absolutePanel(top=20, left=60, height=20, width=600, h4("Visualização de Dados Climáticos da América do Sul")),
   absolutePanel(id="controls", top=20, right=-10, height=200, width=400,
-    sliderInput("dec", "Decade", min=min(decades), max=max(decades), value=max(decades), step=10, sep="", post="s", width="100%"),
+    sliderInput("dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=10, sep="", post="s", width="100%"),
     wellPanel(
       fluidRow(
         column(6,
-          selectInput("toy", "Time of year", toy_list, toy_list[[1]][1]),
-          selectInput("rcp", "RCP", rcp.labels, rcp.labels[1])
+          selectInput("toy", "Período do Ano", toy_list, toy_list[[1]][1]),
+          selectInput("rcp", "Modelo", rcp.labels, rcp.labels[1])
         ),
         column(6,
-          selectInput("variable", "Variable", var.labels, var.labels[1]),
+          selectInput("variable", "Variável", var.labels, var.labels[1]),
           selectInput("mod_or_stat", "GCM data", maptype_list, maptype_list[[1]][1])
         )
       ),
       conditionalPanel("input.show_communities == true",
-        selectInput("location", "Community", c("", locs$loc), selected="", width="100%"),
+        selectInput("location", "Cidade", c("", locs$loc), selected="", width="100%"),
           conditionalPanel("input.location !== null && input.location !== ''",
             actionButton("btn_modal_loc", "Community Insights", class="btn-block"))
       )
@@ -75,18 +75,13 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
     ),
     fluidRow(column(12, downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")))
   ),
-  absolutePanel(id="controls", top=60, left=-20, height=300, width=300,
-    plotOutput("sp_density_plot", width="100%", height="auto")
-  ),
   absolutePanel(bottom=10, left=10,
     conditionalPanel(is_gcm_string, checkboxInput("deltas", "Display deltas", FALSE)),
-    checkboxInput("show_communities", "Communities", TRUE),
+    checkboxInput("show_communities", "Cidades", TRUE),
     checkboxInput("show_extent", "Crop/mask", FALSE),
     checkboxInput("show_colpal", "Color options", FALSE),
-    checkboxInput("legend", "Legend", TRUE),
-    checkboxInput("ttips", "Tooltips", FALSE)
+    checkboxInput("legend", "Legend", TRUE)
   ),
-  bsTooltip("ttips", "Toggle tooltips like this one for other app controls.", "right", options=list(container="body")),
   absolutePanel(id="controls", bottom=240, left=-10, height=190, width=320,
     conditionalPanel("input.show_colpal == true",
     wellPanel(

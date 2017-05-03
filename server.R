@@ -155,7 +155,7 @@ shinyServer(function(input, output, session) {
 
   # Initialize map
   output$Map <- renderLeaflet({
-    leaflet() %>% setView(lon, lat, 4) %>% addTiles() %>%
+    leaflet() %>% setView(-49.751058,-11.486422, 4) %>% addTiles() %>%
       addCircleMarkers(data=locs, radius=6, color="black", stroke=FALSE, fillOpacity=0.5, group="locations", layerId = ~loc)
   })
 
