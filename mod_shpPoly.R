@@ -2,21 +2,21 @@ shpPolyInput <- function(id, label, btn){
   ns <- NS(id)
   tagList(
     bsModal(ns("modal_shp"), "Mask climate map overlays to a shapefile", btn, size="large",
-      fluidRow(
-        column(12,
-          fileInput(ns("shp_file"), label=label, accept=c(".shp",".dbf",".sbn",".sbx",".shx",".prj"), multiple=TRUE, width="100%")
-        )
-      ),
-      tabsetPanel(
-        tabPanel("Original shapefile", plotOutput(ns("Shp_Plot"), height="auto"), value="original"),
-        tabPanel("Final overlay", leafletOutput(ns("Map")), value="final"),
-        tabPanel("Summary", verbatimTextOutput(ns("Map_Summary")), value="final_summary"),
-        tabPanel("Data", dataTableOutput(ns("Map_Table")), value="final_table"),
-        id=ns("tp_shp")
-      ),
-      br(),
-      uiOutput(ns("Mask_Btn")),
-      uiOutput(ns("Mask_Complete"))
+            fluidRow(
+              column(12,
+                     fileInput(ns("shp_file"), label=label, accept=c(".shp",".dbf",".sbn",".sbx",".shx",".prj"), multiple=TRUE, width="100%")
+              )
+            ),
+            tabsetPanel(
+              tabPanel("Original shapefile", plotOutput(ns("Shp_Plot"), height="auto"), value="original"),
+              tabPanel("Final overlay", leafletOutput(ns("Map")), value="final"),
+              tabPanel("Summary", verbatimTextOutput(ns("Map_Summary")), value="final_summary"),
+              tabPanel("Data", dataTableOutput(ns("Map_Table")), value="final_table"),
+              id=ns("tp_shp")
+            ),
+            br(),
+            uiOutput(ns("Mask_Btn")),
+            uiOutput(ns("Mask_Complete"))
     )
   )
 }
@@ -31,7 +31,7 @@ shpPoly <- function(input, output, session, r=NULL){
     validate(need(input$tp_shp, message=FALSE))
     input$tp_shp
   })
-
+  
   shp <- reactive({
     req(input$shp_file)
     if(!is.data.frame(userFile())) return()
@@ -42,14 +42,14 @@ shpPoly <- function(input, output, session, r=NULL){
     x <- try(readOGR(dir, strsplit(userFile()$name[1], "\\.")[[1]][1]), TRUE)
     if(class(x)=="try-error") NULL else x
   })
-
+  
   valid_proj <- reactive({ req(shp()); if(is.na(proj4string(shp()))) FALSE else TRUE })
-
+  
   shp_wgs84 <- reactive({
     req(shp(), valid_proj())
     if(valid_proj()) spTransform(shp(), CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")) else NULL
   })
-
+  
   valid_domain <- reactive({
     req(shp_wgs84())
     if(is.null(r)) return(TRUE)
@@ -59,14 +59,14 @@ shpPoly <- function(input, output, session, r=NULL){
     }
     FALSE
   })
-
+  
   lon <- reactive({ if(valid_proj()) (xmin(shp_wgs84()) + xmax(shp_wgs84()))/2 else 0 })
   lat <- reactive({ if(valid_proj()) (ymin(shp_wgs84()) + ymax(shp_wgs84()))/2 else 0 })
   plot_ht <- reactive({ if(is.null(shp())) 0 else 400 })
   eb <- element_blank()
   theme_blank <- theme(axis.line=eb, axis.text.x=eb, axis.text.y=eb, axis.ticks=eb, axis.title.x=eb, axis.title.y=eb,
-    legend.position="none", panel.background=eb, panel.border=eb, panel.grid.major=eb, panel.grid.minor=eb, plot.background=eb)
-
+                       legend.position="none", panel.background=eb, panel.border=eb, panel.grid.major=eb, panel.grid.minor=eb, plot.background=eb)
+  
   output$Shp_Plot <- renderPlot({
     if(!is.null(shp())){
       cl <- class(shp())
@@ -93,7 +93,7 @@ shpPoly <- function(input, output, session, r=NULL){
     #if(!is.null(input$mask_btn) && input$mask_btn==1) return()
     if(valid_domain()) actionButton(ns("mask_btn"), "Mask to Shapefile", class="btn-block") else NULL
   })
-
+  
   output$Mask_Complete <- renderUI({
     if(!length(input$shp_file)) return(h4("No shapefile uploaded."))
     if(is.null(shp())) return(HTML(
@@ -105,7 +105,7 @@ shpPoly <- function(input, output, session, r=NULL){
     if(!is.null(out())) return(h4("Mask complete. You may close this window."))
     #if(!is.null(input$mask_btn) && input$mask_btn > 0)
   })
-
+  
   observe({
     if(!is.null(shp()) && tp()=="final"){
       cl <- class(shp_wgs84())
@@ -115,7 +115,7 @@ shpPoly <- function(input, output, session, r=NULL){
       if(cl=="SpatialPointsDataFrame") x %>% addCircleMarkers(data=shp_wgs84(), weight=2, radius=6)
     }
   })
-
+  
   out <- reactive({
     if(is.null(input$mask_btn) || input$mask_btn==0 || !valid_domain()) NULL else list(shp=shp_wgs84(), shp_original=shp())
   })

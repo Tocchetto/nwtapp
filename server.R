@@ -1,7 +1,7 @@
 eb <- element_blank()
 theme1 <- theme(plot.background=eb, legend.position="bottom")
 theme_blank <- theme(axis.line=eb, axis.text.x=eb, axis.text.y=eb, axis.ticks=eb, axis.title.x=eb, axis.title.y=eb,
-  legend.position="none", panel.background=eb, panel.border=eb, panel.grid.major=eb, panel.grid.minor=eb, plot.background=eb)
+                     legend.position="none", panel.background=eb, panel.border=eb, panel.grid.major=eb, panel.grid.minor=eb, plot.background=eb)
 acm_defaults <- function(map, x, y) addCircleMarkers(map, x, y, radius=6, color="black", fillColor="orange", fillOpacity=1, opacity=1, weight=2, stroke=TRUE, layerId="Selected")
 
 shinyServer(function(input, output, session) {
@@ -11,22 +11,22 @@ shinyServer(function(input, output, session) {
   mon_index <- reactive({ match(Mos(), month.abb) })
   Variable <- reactive({ vars[var.labels==input$variable] })
   RCPs <- reactive({ rcps[rcp.labels==input$rcp] })
-
+  
   dt_maps_file <- reactive({
     req(Variable(), RCPs(), input$dec)
     paste0("map_subtables/", Variable(),"_",RCPs(), "_", input$dec, ".RData")
   })
-
+  
   rv <- reactiveValues()
-
+  
   load_file <- function(file){
     load(file[1], envir=environment())
     rv[["d"]] <- d
   }
-
+  
   updateData <- reactive({ load_file(dt_maps_file()) })
   observe({ updateData() })
-
+  
   Extent <- reactive({
     x <- input$lon_range
     y <- input$lat_range
@@ -44,25 +44,25 @@ shinyServer(function(input, output, session) {
     }
     e
   })
-
+  
   sea_func <- reactive({ if(Variable()=="pr") sum else mean })
-
+  
   stat_func <- reactive({
     p <- input$mod_or_stat
     if(p %in% models) return()
     switch(p, Mean=mean,  Min=function(x,...) min(x,...), Max=function(x,...) max(x,...),
-      Spread=function(x,...) range(x,...))
+           Spread=function(x,...) range(x,...))
   })
-
+  
   # MODULE: polygon shapefile upload and related reactive objects
   shp <- callModule(shpPoly, "user_shapefile", r=r)
-
+  
   Shp_plot_ht <- reactive({
     if(is.null(shp())) return(0)
     e <- extent(shp()$shp_original)[]
     round(100*(e[4]-e[3])/(e[2]-e[1]))
   })
-
+  
   output$Shp_Plot <- renderPlot({
     if(!is.null(shp())){
       cl <- class(shp()$shp_original)
@@ -82,17 +82,17 @@ shinyServer(function(input, output, session) {
     }
     g
   }, height=function() Shp_plot_ht(), bg="transparent")
-
+  
   output$Mask_in_use <- renderUI({ if(is.null(shp())) h4("None") else plotOutput("Shp_Plot", height="auto") })
-
+  
   output$Shp_On <- renderUI({ if(is.null(shp())) br() else checkboxInput("shp_on", "Shapefile active", TRUE) })
-
+  
   # prepping GCM/CRU, raw/deltas, months/seasons, models/stats, temp/precip
   CRU_ras <- reactive({
     idx <- match(input$toy, names(cru6190[[Variable()]]))
     subset(cru6190[[Variable()]], idx) %>% crop(Extent())
   })
-
+  
   ras <- reactive({
     #dec.idx <- seq_along(unique(rv$d$Decade)) #which(decades==input$dec)
     mon.idx <- switch(input$toy, Winter=c(1,2,12), Spring=3:5, Summer=6:8, Fall=9:11)
@@ -121,10 +121,10 @@ shinyServer(function(input, output, session) {
     x[is.nan(x)] <- NA
     x
   })
-
+  
   # store raster values once, separate from raster object
   ras_vals <- reactive({ values(ras()) })
-
+  
   output$dl_raster <- downloadHandler(
     filename="rasterLayer.tif",
     content=function(file){
@@ -132,7 +132,7 @@ shinyServer(function(input, output, session) {
       file.rename(rasfile@file@name, file)
     }
   )
-
+  
   # Colors and color palettes
   Colors <- reactive({
     req(input$colpal)
@@ -141,29 +141,29 @@ shinyServer(function(input, output, session) {
     if(pal %in% sq) custom.colors <- custom.colors[c(1,3)]
     if(pal %in% c("Custom div", "Custom seq")) custom.colors else pal
   })
-
+  
   pal <- reactive({
     colorNumeric(Colors(), ras_vals(), na.color="transparent")
   })
-
+  
   # Map legend title, also used for spatial summary density plot
   Legend_Title <- reactive({
     p <- input$variable=="Precipitation"
     d <- input$deltas
     if(p & d) "Precip. deltas" else if(p) "Precipitation (mm)" else if(!p & d) "Temp. deltas (C)" else "Temperature (C)"
   })
-
+  
   # Initialize map
   output$Map <- renderLeaflet({
-    leaflet() %>% setView(-49.75105,-11.48642, 4) %>% addTiles() %>%
+    leaflet() %>% setView(lon, lat, 4) %>% addTiles() %>% #Centraliza o mapa
       addCircleMarkers(data=locs, radius=6, color="black", stroke=FALSE, fillOpacity=0.5, group="locations", layerId = ~loc)
   })
-
+  
   #### Map-related observers ####
   observe({ # raster layers
     leafletProxy("Map") %>% removeTiles(layerId="rasimg") %>% addRasterImage(ras(), colors=pal(), opacity=0.8, layerId="rasimg")
   })
-
+  
   observe({ # user-provided points
     if(class(shp()$shp)=="SpatialPointsDataFrame" & (!is.null(input$shp_on) && input$shp_on)){
       x <- shp()$shp@coords
@@ -175,7 +175,7 @@ shinyServer(function(input, output, session) {
         addCircleMarkers(data=x, weight=1, radius=6, color=~clrs, stroke=TRUE, fillOpacity=0.8, group="user_points", layerId=paste0("user_points_", 1:nrow(x)))
     } else leafletProxy("Map") %>% clearGroup("user_points")
   })
-
+  
   observe({ # legend
     proxy <- leafletProxy("Map")
     proxy %>% clearControls()
@@ -183,7 +183,7 @@ shinyServer(function(input, output, session) {
       proxy %>% addLegend(position="bottomright", pal=pal(), values=ras_vals(), title=Legend_Title())
     }
   })
-
+  
   observe({ # show or hide location markers
     proxy <- leafletProxy("Map")
     if (input$show_communities) {
@@ -193,7 +193,7 @@ shinyServer(function(input, output, session) {
       proxy %>% hideGroup("locations") %>% removeMarker(layerId="Selected")
     }
   })
-
+  
   observeEvent(input$Map_marker_click, { # update the map markers and view on map clicks
     p <- input$Map_marker_click
     proxy <- leafletProxy("Map")
@@ -203,14 +203,14 @@ shinyServer(function(input, output, session) {
       proxy %>% setView(lng=p$lng, lat=p$lat, input$Map_zoom) %>% acm_defaults(p$lng, p$lat)
     }
   })
-
+  
   observeEvent(input$Map_marker_click, { # update the location selectInput on map clicks
     p <- input$Map_marker_click
     if(!is.null(p$id)){
       if(is.null(input$location) || input$location!=p$id) updateSelectInput(session, "location", selected=p$id)
     }
   })
-
+  
   observeEvent(input$location, { # update the map markers and view on location selectInput changes
     p <- input$Map_marker_click
     p2 <- subset(locs, loc==input$location)
@@ -224,12 +224,12 @@ shinyServer(function(input, output, session) {
     }
   })
   #### END Map-related observers ####
-
+  
   # Location data
   Loc_Var <- reactive({ vars[var.labels==input$loc_variable] })
-
+  
   Loc_RCPs <- reactive({ rcps[rcp.labels==input$loc_rcp] })
-
+  
   Data <- reactive({
     x <- filter(d.gcm, Var==Loc_Var() & RCP==Loc_RCPs()) %>% do(
       Locs=.$Locs[[1]] %>% purrr::map2(month.abb, ~mutate(.x, Month=factor(.y, levels=month.abb))) %>%
@@ -241,7 +241,7 @@ shinyServer(function(input, output, session) {
       group_by(Location, Var, RCP, Model, Month)
     x
   })
-
+  
   Data_sub <- reactive({ # subset data
     p <- input$loc_toy
     monthly <- p %in% month.abb
@@ -262,14 +262,14 @@ shinyServer(function(input, output, session) {
     }
     x
   })
-
+  
   Data_sub2 <- reactive({ # transform to deltas and/or remove CRU 3.2 if required
     x <- Data_sub()
     cru.mean <- (filter(x, Model=="CRU 3.2" & Year %in% 1961:1990) %>% summarise(Mean=mean(value)))$Mean
     if(input$loc_deltas){
       x <- group_by(x, Model)
       if(Loc_Var()=="pr"){
-         x <- mutate(x, value=round(value / cru.mean, 2))
+        x <- mutate(x, value=round(value / cru.mean, 2))
         #x[is.infinite(x)] <- NA
       } else {
         x <- mutate(x, value=round(value - cru.mean, 2))
@@ -278,18 +278,18 @@ shinyServer(function(input, output, session) {
     if(!input$loc_cru) x <- filter(x, Model!="CRU 3.2")
     x
   })
-
+  
   loc_data_filename <- reactive({ # input$gbm_plottype and GBM_Region2() don't update from with server-side UI selectInput
     #paste0("gbmResults_", gsub(" ", "", input$gbm_plottype), "_", gsub(" ", "", GBM_Region()), gsub(" ", "", GBM_Region2()), ".pdf")
     "current_plot_data.csv"
   })
-
+  
   # Outputs for location modal
   output$dl_loc_data <- downloadHandler(
     filename=loc_data_filename(),
     content=function(file){	write.csv(Data_sub2(), file, quote=FALSE, row.names=FALSE) }
   )
-
+  
   do_tsplot <- reactive({
     req(input$modal_loc)
     if(!input$modal_loc) return()
@@ -315,35 +315,35 @@ shinyServer(function(input, output, session) {
     if(input$loc_trend) g <- g + geom_smooth(aes(colour=NULL), colour="black", size=1)
     g
   })
-
+  
   output$TS_Plot <- renderPlot({ do_tsplot() })
-
+  
   tsplot_filename <- reactive({ # input$gbm_plottype and GBM_Region2() don't update from with server-side UI selectInput
     #paste0("gbmResults_", gsub(" ", "", input$gbm_plottype), "_", gsub(" ", "", GBM_Region()), gsub(" ", "", GBM_Region2()), ".pdf")
     "current_plot.pdf"
   })
-
+  
   tsplot_h <- reactive({ session$clientData$output_TS_Plot_height })
   tsplot_w <- reactive({ session$clientData$output_TS_Plot_width })
-
+  
   output$dl_tsplot <- downloadHandler(
     filename=tsplot_filename(),
     content=function(file){	pdf(file=file, width=15, height=15*tsplot_h()/tsplot_w(), pointsize=6); print(do_tsplot()); dev.off() }
   )
-
+  
   # Spatial distribution density plot
   output$sp_density_plot <- renderPlot({
     x <- ras_vals()
     x <- data.table(`Spatial Distribution`=x[!is.na(x)])
     ggplot(x, aes(`Spatial Distribution`)) + geom_density(fill="#33333350") + theme1 + labs(x=Legend_Title())
   }, width=300, height=300, bg="transparent")
-
+  
   observe({ # no deltas allowed when comparing across models
     if(!(input$mod_or_stat %in% models)){
       updateCheckboxInput(session, "deltas", value=FALSE)
     }
   })
-
+  
   # tooltips
   observe({
     if(length(input$ttips) && input$ttips){
@@ -370,5 +370,5 @@ shinyServer(function(input, output, session) {
       removeTooltip(session, "btn_modal_shp")
     }
   })
-
+  
 })
