@@ -15,19 +15,19 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
                             bsModal("modal_loc", "Community Insights", "btn_modal_loc", size = "large",
                                     fluidRow(
                                       column(3,
-                                             selectInput("loc_variable", "", var.labels, var.labels[1]),
+                                             selectInput(inputId = "loc_variable", "", var.labels, var.labels[1]),
                                              checkboxInput("loc_deltas", "Display deltas", FALSE)
                                       ),
                                       column(3,
-                                             selectInput("loc_rcp", "", rcp.labels, rcp.labels[1]),
+                                             selectInput(inputId = "loc_rcp", "", rcp.labels, rcp.labels[1]),
                                              checkboxInput("loc_cru", "Show historical", FALSE)
                                       ),
                                       column(3,
-                                             selectInput("loc_stat", "", c("All GCMs", "Mean GCM", "Both"), "All GCMs"),
+                                             selectInput(inputId = "loc_stat", "", c("All GCMs", "Mean GCM", "Both"), "All GCMs"),
                                              checkboxInput("loc_trend", "Smooth trend", FALSE)
                                       ),
                                       column(3,
-                                             selectInput("loc_toy", "", toy_list, toy_list[[1]][1])
+                                             selectInput(inputId = "loc_toy", label = "", choices = toy_list, selected = toy_list[[1]][1])
                                       )
                                     ),
                                     plotOutput("TS_Plot"),
@@ -45,11 +45,11 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
                                               wellPanel(
                                                 fluidRow(
                                                   column(6,
-                                                         selectInput("toy", "Time of year", toy_list, toy_list[[1]][1]),
+                                                         selectInput(inputId = "toy", label = "Time of year", choices = toy_list, selected = toy_list[[1]][1]),
                                                          selectInput("rcp", "RCP", rcp.labels, rcp.labels[1])
                                                   ),
                                                   column(6,
-                                                         selectInput("variable", "Variable", var.labels, var.labels[1]),
+                                                         selectInput(inputId = "variable", label = "Variable", choices = var.labels, selected = var.labels[1]),
                                                          selectInput("mod_or_stat", "GCM data", maptype_list, maptype_list[[1]][1])
                                                   )
                                                 ),
@@ -91,7 +91,7 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
                                               conditionalPanel("input.show_colpal == true",
                                                                wellPanel(
                                                                  fluidRow(
-                                                                   column(6, selectInput("colpal", "Palette", colpals_list, colpals_list[[1]][1])),
+                                                                   column(6, selectInput(inputId = "colpal", "Palette", colpals_list, colpals_list[[1]][1])),
                                                                    column(6, conditionalPanel("input.colpal == 'Custom div'", colourInput("col_med", "Med", value = "#CEEBF0")))
                                                                  ),
                                                                  fluidRow(
