@@ -1,26 +1,28 @@
-library(shiny)
-library(leaflet)
-library(shinyBS)
-library(shinyjs)
-library(RColorBrewer)
-library(DT)
-library(rgdal)
-library(raster)
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(ggplot2)
-
 shinyUI(bootstrapPage(
   
-  tags$style(type = "text/css", "html, body {width:100%;height:100%}"), #tags style para criar estilo css 
-  leafletOutput("map", width = "100%", height = "100%"),
+  tags$style(type = "text/css", "html, body {width:100%;height:100%}"), #tags style para criar estilo css
+  leafletOutput("Map", width="100%", height="100%"),
+  div(class="outer", #Painel esquerdo principal
+      tags$head(includeCSS("www/styles.css")),
+      #absolutePanel(top=20, left=60, height=20, width=600, h4("Northwest Territories Future Climate Outlook")),
+      absolutePanel(id="controls", top=0, right=0, height=200, width=400,
+                    sliderInput("dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=10, sep="", post="s", width="100%"),
+                    wellPanel(
+                      fluidRow(
+                        column(6,
+                               selectInput(inputId = "toy", label = "Época do Ano:", choices = toy_list, selected = toy_list[[1]][1])
+                        ),
+                        column(6,
+                               selectInput(inputId = "variable", label = "Variável:", choices = var.labels, selected = var.labels[1])
+                        )
+                      ),
+                      fluidRow(
+                        column(12,
+                               selectInput("location", "Cidades", choices = cities.labels, selected="", width="100%")
+                               )
+                      )
+                    ))
+      )
+
   
-  absolutePanel(top = 10, right = 10, #Cria um painel cujo conteúdo está posicionado top 10 e right 10.
-                sliderInput("range", "Década", min(quakes$mag), max(quakes$mag), #Constrói um widget de controle deslizante
-                            value = range(quakes$mag), step = 0.1
-                ))
-
-
-)
-)
+))
