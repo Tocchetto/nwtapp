@@ -13,6 +13,16 @@ shinyUI(bootstrapPage(
                                selectInput(inputId = "toy", label = "Época do Ano:", choices = toy_list, selected = toy_list[[1]][1])
                         ),
                         column(6,
+                               selectInput(inputId = "month", label = "Meses do Ano:", choices = month_list, selected = month_list[[1]][1])
+                        )
+                      ),
+                      fluidRow(
+                        column(12,
+                               selectInput(inputId = "modelo", label = "Modelo:", choices = modelo, selected = modelos[1])
+                        )
+                      ),
+                        fluidRow(
+                        column(12,
                                selectInput(inputId = "variable", label = "Variável:", choices = var.labels, selected = var.labels[1])
                         )
                       ),
@@ -20,7 +30,8 @@ shinyUI(bootstrapPage(
                         column(12,
                                selectInput("location", "Cidades", choices = cities.labels, selected="", width="100%")
                                )
-                      )
+                      ),
+                      fluidRow(column(12, downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")))
                     ))
       )
 
