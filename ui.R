@@ -9,7 +9,7 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
                    windowTitle="NT Climate",
                    collapsible=TRUE,
                    id="nb",
-                   tabPanel("Climate", value="vis",
+                   tabPanel("Climate", value="vis", #Painel da modal de inserir o shapefile
                             tags$head(includeScript("ga-nwtapp.js"), includeScript("ga-allapps.js")),
                             shpPolyInput("user_shapefile", "Upload polygon shapefile", "btn_modal_shp"),
                             bsModal("modal_loc", "Community Insights", "btn_modal_loc", size = "large",
@@ -36,7 +36,7 @@ shinyUI(navbarPage(theme="http://bootswatch.com/spacelab/bootstrap.css", inverse
                                       column(3, downloadButton("dl_loc_data", "Get Data", class="btn-block"))
                                     )
                             ),
-                            div(class="outer",
+                            div(class="outer", #Painel esquerdo principal
                                 tags$head(includeCSS("www/styles.css")),
                                 leafletOutput("Map", width="100%", height="100%"),
                                 absolutePanel(top=20, left=60, height=20, width=600, h4("Northwest Territories Future Climate Outlook")),
