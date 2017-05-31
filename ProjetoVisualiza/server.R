@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
     leaflet() %>% setView(lon, lat, 4) %>% addTiles() #%>% #Centraliza o mapa
   })
   
+  
 })
 
 
