@@ -31,7 +31,16 @@ shinyUI(bootstrapPage(
                                selectInput("location", "Cidades", choices = cities.labels, selected="", width="100%")
                                )
                       ),
-                      fluidRow(column(12, downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")))
+                      fluidRow(
+                        column(6,
+                               actionButton("btn_modal_shp", "Upload shapefile", class="btn-block"),
+                               uiOutput("Shp_On")
+                        )
+                      ),
+                      fluidRow(
+                        column(12, downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")
+                               )
+                      )
                     ))
       )
 
