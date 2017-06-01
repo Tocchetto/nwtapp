@@ -18,7 +18,7 @@ shinyUI(bootstrapPage(
                       ),
                       fluidRow(
                         column(12,
-                               selectInput(inputId = "modelo", label = "Modelo:", choices = modelo, selected = modelos[1])
+                               selectInput(inputId = "modelo", label = "Modelo:", choices = modelos, selected = modelos[1])
                         )
                       ),
                         fluidRow(

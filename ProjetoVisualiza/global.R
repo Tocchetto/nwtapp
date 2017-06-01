@@ -11,6 +11,13 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+#Exemplo https://rstudio.github.io/leaflet/legends.html
+countries <- readOGR("countries.geojson", "OGRGeoJSON")
+pal <- colorNumeric(
+  palette = "YlGnBu",
+  domain = countries$gdp_md_est
+)
+
 decades <- seq(1960, 2099, by=1)
 lon = -53.9010478
 lat = -14.940753
@@ -23,7 +30,7 @@ toy_list <- list(Season=season.labels)
 #month_list <- list(Month=month.abb)
 month_list = c("Jan","Fev","Mar","Abr","Maio","Jun","Jul","Aug","Set","Out","Nov","Dez")
 
-modelo = c("ETA_MIROC5_RCP4.5_20KM","ETA_MIROC5_RCP8.5_20KM","ETA_HADGEM2-ES_RCP4.5_20KM","ETA_HADGEM2-ES_RCP4.5_5KM","ETA_HADGEM2-ES_RCP8.5_20KM","ETA_HADGEM2-ES_RCP8.5_5KM","ETA_CANESM2-ES_RCP4.5_20KM","ETA_CANESM2-ES_RCP8.5_20KM","ETA_BESM-ES_RCP4.5_20KM","ETA_BESM-ES_RCP8.5_20KM")
+modelos = c("ETA_MIROC5_RCP4.5_20KM","ETA_MIROC5_RCP8.5_20KM","ETA_HADGEM2-ES_RCP4.5_20KM","ETA_HADGEM2-ES_RCP4.5_5KM","ETA_HADGEM2-ES_RCP8.5_20KM","ETA_HADGEM2-ES_RCP8.5_5KM","ETA_CANESM2-ES_RCP4.5_20KM","ETA_CANESM2-ES_RCP8.5_20KM","ETA_BESM-ES_RCP4.5_20KM","ETA_BESM-ES_RCP8.5_20KM")
 
 #Lista das Variáveis
 var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "Componente Meridional do Vento a 10 m da Superfície", 
@@ -41,5 +48,5 @@ var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "
                 "Radiação de Onda Longa Emergente no Topo da Atmosfera", "Albedo Superficial", "Energia Potencial Disponível para Convecção",
                 "Água Precipitável", "Altura Geopotencial", "Componente Zonal do Vento", "Componente Meridional do Vento", "Temperatura Absoluta",
                 "Umidade Relativa", "Movimento Vertical", "Umidade Específica")
-
+#Lista das Cidades
 cities.labels <- c("Porto Alegre", "Passo Fundo")
