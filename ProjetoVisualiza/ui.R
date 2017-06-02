@@ -18,7 +18,7 @@ shinyUI(bootstrapPage(
                       ),
                       fluidRow(
                         column(12,
-                               selectInput(inputId = "modelo", label = "Modelo:", choices = modelos, selected = modelos[1])
+                               selectInput(inputId = "model", label = "Modelo:", choices = models, selected = models[1])
                         )
                       ),
                         fluidRow(
@@ -28,18 +28,17 @@ shinyUI(bootstrapPage(
                       ),
                       fluidRow(
                         column(12,
-                               selectInput("location", "Cidades", choices = cities.labels, selected="", width="100%")
-                               )
+                               selectInput("location", "Cidades/Aeroportos", choices = cities.labels, selected="", width="100%")
+                        )
                       ),
                       fluidRow(
                         column(6,
                                actionButton("btn_modal_shp", "Upload shapefile", class="btn-block"),
                                uiOutput("Shp_On")
+                        ),
+                        column(6, 
+                               downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")
                         )
-                      ),
-                      fluidRow(
-                        column(12, downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")
-                               )
                       )
                     ))
       )

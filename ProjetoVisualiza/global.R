@@ -30,7 +30,7 @@ toy_list <- list(Season=season.labels)
 #month_list <- list(Month=month.abb)
 month_list = c("Jan","Fev","Mar","Abr","Maio","Jun","Jul","Aug","Set","Out","Nov","Dez")
 
-modelos = c("ETA_MIROC5_RCP4.5_20KM","ETA_MIROC5_RCP8.5_20KM","ETA_HADGEM2-ES_RCP4.5_20KM","ETA_HADGEM2-ES_RCP4.5_5KM","ETA_HADGEM2-ES_RCP8.5_20KM","ETA_HADGEM2-ES_RCP8.5_5KM","ETA_CANESM2-ES_RCP4.5_20KM","ETA_CANESM2-ES_RCP8.5_20KM","ETA_BESM-ES_RCP4.5_20KM","ETA_BESM-ES_RCP8.5_20KM")
+models = c("ETA_MIROC5_RCP4.5_20KM","ETA_MIROC5_RCP8.5_20KM","ETA_HADGEM2-ES_RCP4.5_20KM","ETA_HADGEM2-ES_RCP4.5_5KM","ETA_HADGEM2-ES_RCP8.5_20KM","ETA_HADGEM2-ES_RCP8.5_5KM","ETA_CANESM2-ES_RCP4.5_20KM","ETA_CANESM2-ES_RCP8.5_20KM","ETA_BESM-ES_RCP4.5_20KM","ETA_BESM-ES_RCP8.5_20KM")
 
 #Lista das Variáveis
 var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "Componente Meridional do Vento a 10 m da Superfície", 
@@ -50,3 +50,15 @@ var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "
                 "Umidade Relativa", "Movimento Vertical", "Umidade Específica")
 #Lista das Cidades
 cities.labels <- c("Porto Alegre", "Passo Fundo")
+
+#Functions
+getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
+  if(variable == "Temperatura Máxima")return(" °C")
+  if(variable == "Temperatura Mínima")return(" °C")
+  if(variable == "Temperatura do Ponto de Orvalho")return(" °C")
+  if(variable == "Temperatura Absoluta")return(" °C")
+  if(variable == "Temperatura a 2 m da Superfície")return(" °C")
+  if(variable == "Temperatura à Superfície")return(" °C")
+  if(variable == "Temperatura do Solo na Camada de 0-10 cm da Superfície")return(" °C")
+  if(variable == "Temperatura do Solo na Camada de 10-40 cm da Superfície")return(" °C")
+}

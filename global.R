@@ -53,3 +53,7 @@ colpals <- RColorBrewer::brewer.pal.info
 dv <- rownames(colpals)[colpals["category"]=="div"]
 sq <- rownames(colpals)[colpals["category"]=="seq"]
 colpals_list <- list(Divergent=c(Custom="Custom div", dv), Sequential=c(Custom="Custom seq", sq))
+
+
+
+

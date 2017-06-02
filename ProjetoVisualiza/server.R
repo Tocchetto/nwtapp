@@ -1,3 +1,4 @@
+#source("./BusinessLogic.R")
 shinyServer(function(input, output, session) {
 
   # Initialize map
@@ -8,10 +9,11 @@ shinyServer(function(input, output, session) {
                 color = ~pal(gdp_md_est)
     ) %>%
     addLegend("bottomright", pal = pal, values = ~gdp_md_est,
-              title = "Nome da Variavel Selecionada no Menu",
-              labFormat = labelFormat(prefix = "Km/$/*"),
+              title = input$variable,
+              labFormat = labelFormat(suffix = getPrefix(input$variable)),
               opacity = 1
     )
+
   })
   
   
