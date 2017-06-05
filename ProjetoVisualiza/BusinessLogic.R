@@ -1,5 +1,10 @@
 #Ambiente Global:
-
+#TP2M = file("./eta_15km_TP2M_2017060400-2017061500.txt")
+#TP2M <- generateDF('TP2M', curDate, fDate)
+#TP2M_raster = rasterFromXYZ(TP2M[-75351,])
+#OCIS = file("./eta_15km_OCIS_2017060400-2017061500.txt")
+#OCIS <- generateDF('OCIS', curDate, fDate)
+#OCIS_raster = rasterFromXYZ(OCIS[-75351,])
 #Functions
 getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
   if(variable == "Temperatura Máxima")return(" °C")
@@ -61,7 +66,7 @@ fDate <- format(fDate, '%Y%m%d')
 #downloadFile('TP2M')
 #downloadFile('UR2M')
 #downloadFile('V10M')
-
+#OCIS = file("./eta_15km_OCIS_2017060400-2017061500.txt")
 #OCIS <- generateDF('OCIS', curDate, fDate)
 #PREC <- generateDF('PREC', curDate, fDate)
 #TP2M <- generateDF('TP2M', curDate, fDate)
