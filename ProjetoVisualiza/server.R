@@ -22,8 +22,16 @@ shinyServer(function(input, output, session) {
                           labFormat = labelFormat(suffix = getPrefix(input$variable)),
                           opacity = 1
                 )
+    
+    
 
   })
+  output$rasterDownload <- downloadHandler(
+    filename="raster.tif",
+    content=function(file){
+      writeRaster(getMapRaster(input$variable), file, format="GTiff", overwrite=TRUE)
+    }
+  )
   
   
 })

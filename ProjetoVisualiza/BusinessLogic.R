@@ -1,34 +1,4 @@
 #Ambiente Global:
-#TP2M = file("./eta_15km_TP2M_2017060400-2017061500.txt")
-#TP2M <- generateDF('TP2M', curDate, fDate)
-#TP2M_raster = rasterFromXYZ(TP2M[-75351,])
-#OCIS = file("./eta_15km_OCIS_2017060400-2017061500.txt")
-#OCIS <- generateDF('OCIS', curDate, fDate)
-#OCIS_raster = rasterFromXYZ(OCIS[-75351,])
-#Functions
-getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
-  if(variable == "Temperatura Máxima")return(" °C")
-  if(variable == "Temperatura Mínima")return(" °C")
-  if(variable == "Temperatura do Ponto de Orvalho")return(" °C")
-  if(variable == "Temperatura Absoluta")return(" °C")
-  if(variable == "Temperatura a 2 m da Superfície")return(" °C")
-  if(variable == "Temperatura à Superfície")return(" °C")
-  if(variable == "Temperatura do Solo na Camada de 0-10 cm da Superfície")return(" °C")
-  if(variable == "Temperatura do Solo na Camada de 10-40 cm da Superfície")return(" °C")
-}
-
-getMapRaster <- function(variable){
-  if(variable == "Temperatura Máxima"){
-    r <- raster(TP2M_raster,layer=10)
-    crs(r) <- CRS("+init=epsg:4326")
-    return(r)
-  }else{
-    r <- raster(OCIS_raster,layer=10)
-    crs(r) <- CRS("+init=epsg:4326")
-    return(r)
-  }
-}
-
 downloadFile <- function(cData){
   # ftp-supercomputacao.cptec.inpe.br/public/etaclim/APP/Eta15km_BR/OCIS/eta_15km_OCIS_2016062800-2016070900.tar.gz
   baseURL <- 'http://ftp-supercomputacao.cptec.inpe.br/public/etaclim/APP/Eta15km_BR/'
@@ -54,12 +24,42 @@ generateDF <- function(cData, curDate, fDate){
   #file.remove(fileName)
   return(cptec_t)
 }
-
 date <- Sys.Date()-1 # dia atual / data do sistema
 curDate <- format(date, '%Y%m%d')
 dateString <- format(date, '%Y/%m/%d')
 fDate <- as.Date(dateString) + 11
 fDate <- format(fDate, '%Y%m%d')
+
+#TP2M = file("./eta_15km_TP2M_2017060400-2017061500.txt")
+#TP2M <- generateDF('TP2M', curDate, fDate)
+#TP2M_raster = rasterFromXYZ(TP2M[-75351,])
+#OCIS = file("./eta_15km_OCIS_2017060400-2017061500.txt")
+#OCIS <- generateDF('OCIS', curDate, fDate)
+#OCIS_raster = rasterFromXYZ(OCIS[-75351,])
+
+#Functions
+getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
+  if(variable == "Temperatura Máxima")return(" °C")
+  if(variable == "Temperatura Mínima")return(" °C")
+  if(variable == "Temperatura do Ponto de Orvalho")return(" °C")
+  if(variable == "Temperatura Absoluta")return(" °C")
+  if(variable == "Temperatura a 2 m da Superfície")return(" °C")
+  if(variable == "Temperatura à Superfície")return(" °C")
+  if(variable == "Temperatura do Solo na Camada de 0-10 cm da Superfície")return(" °C")
+  if(variable == "Temperatura do Solo na Camada de 10-40 cm da Superfície")return(" °C")
+}
+
+getMapRaster <- function(variable){
+  if(variable == "Temperatura Máxima"){
+    r <- raster(TP2M_raster,layer=10)
+    crs(r) <- CRS("+init=epsg:4326")
+    return(r)
+  }else{
+    r <- raster(OCIS_raster,layer=10)
+    crs(r) <- CRS("+init=epsg:4326")
+    return(r)
+  }
+}
 
 #downloadFile('OCIS')
 #downloadFile('PREC')
@@ -80,18 +80,18 @@ fDate <- format(fDate, '%Y%m%d')
 #UR2M_raster = rasterFromXYZ(UR2M[-75351,])
 #V10M_raster = rasterFromXYZ(V10M[-75351,])
 
-mostra_raster <- function(n_layer,...){
-  r <- raster(OCIS_raster,layer=n_layer) #raster("nc/oisst-sst.nc")
-  pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
-                      na.color = "transparent")
-  
-  crs(r) <- CRS("+init=epsg:4326")
-  
-  leaflet() %>% addTiles() %>%
-    addRasterImage(r, colors = pal, opacity = 0.8) %>%
-    addLegend(pal = pal, values = values(r),
-              title = "Surface temp")
-}
+# mostra_raster <- function(n_layer,...){
+#   r <- raster(OCIS_raster,layer=n_layer) #raster("nc/oisst-sst.nc")
+#   pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
+#                       na.color = "transparent")
+#   
+#   crs(r) <- CRS("+init=epsg:4326")
+#   
+#   leaflet() %>% addTiles() %>%
+#     addRasterImage(r, colors = pal, opacity = 0.8) %>%
+#     addLegend(pal = pal, values = values(r),
+#               title = "Surface temp")
+# }
 
 #mostra_raster(10)
 #mostra_raster(100)

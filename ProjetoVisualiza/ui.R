@@ -37,7 +37,7 @@ shinyUI(bootstrapPage(
                                uiOutput("Shp_On")
                         ),
                         column(6, 
-                               downloadButton("dl_raster", "Get Map (.tif)", class="btn-block")
+                               downloadButton("rasterDownload", "Get Map (.tif)", class="btn-block")
                         )
                       )
                     ))
