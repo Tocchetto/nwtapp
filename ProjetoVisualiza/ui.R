@@ -7,6 +7,7 @@ shinyUI(bootstrapPage(
       #absolutePanel(top=20, left=60, height=20, width=600, h4("Northwest Territories Future Climate Outlook")),
       absolutePanel(id="controls", top=0, right=0, height=200, width=400,
                     sliderInput("dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=10, sep="", post="s", width="100%"),
+                    shpPolyInput("user_shapefile", "Upload polygon shapefile", "btn_modal_shp"),
                     wellPanel(
                       fluidRow(
                         column(6,

@@ -11,6 +11,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
+source("mod_shpPoly.R")
 #Exemplo https://rstudio.github.io/leaflet/legends.html
 countries <- readOGR("countries.geojson", "OGRGeoJSON")
 # pal <- colorNumeric(
@@ -55,3 +56,35 @@ var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "
 #Lista das Cidades
 cities.labels <- c("Porto Alegre", "Passo Fundo")
 
+
+
+#-------
+d.gcm <- group_by(d.gcm, RCP, Model, Var) %>% arrange(Var, RCP, Model)
+d.cru <- group_by(d.cru, Var)
+r <- subset(cru6190$pr, 1)
+ext <- c(round(xmin(r), 1), round(xmax(r), 1), round(ymin(r), 1), round(ymax(r), 1))
+lon <- (xmin(r)+xmax(r))/2
+lat <- (ymin(r)+ymax(r))/2
+decades <- seq(2010, 2090, by=10)
+
+season.labels <- names(cru6190[[1]])[13:16]
+season.labels.long <- season.labels[c(1,1,2,2,2,3,3,3,4,4,4,1)]
+sea.idx <- list(Winter=c(1,2,12), Spring=3:5, Summer=6:8, Fall=9:11)
+#Month vai receber a abreviação de todos os meses do ano, executar: month.abb para ver
+#Season vai recever os nomes das estações do ano: "Winter" "Spring" "Summer" "Fall"
+#Então toy_list terá 2 vetores, um com as estações e outro com os mêses: toy_list$Season e toy_list$Month
+#list(Season = ("Inverno", "Primavera", "Verão", "Outono"), Month = ("Jan" "Fev" "Mar" "Abr" "Maio" "Jun" "Jul" "Aug" "Set" "Out" "Nov" "Dez")) -> isso nao funciona...
+
+rcps <- sort(unique(d.gcm$RCP))
+rcp.labels <- c("RCP 4.5", "RCP 6.0", "RCP 8.5")
+models <- unique(d.gcm$Model)
+vars <- rev(sort(unique(d.gcm$Var)))
+var.labels <- rev(c("Precipitation", "Temperature"))
+
+maptype_list <- list("Single GCM"=models, Statistic=c("Mean", "Min", "Max", "Spread"))
+is_gcm_string <- paste(sprintf("input.mod_or_stat == '%s'", models), collapse=" || ")
+
+colpals <- RColorBrewer::brewer.pal.info
+dv <- rownames(colpals)[colpals["category"]=="div"]
+sq <- rownames(colpals)[colpals["category"]=="seq"]
+colpals_list <- list(Divergent=c(Custom="Custom div", dv), Sequential=c(Custom="Custom seq", sq))
