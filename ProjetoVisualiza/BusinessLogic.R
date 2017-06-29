@@ -49,16 +49,19 @@ getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor
   if(variable == "Temperatura do Solo na Camada de 10-40 cm da Superfície")return(" °C")
 }
 
-getMapRaster <- function(variable){
-  if(variable == "Temperatura Máxima"){
-    r <- raster(TP2M_raster,layer=10)
-    crs(r) <- CRS("+init=epsg:4326")
-    return(r)
-  }else{
-    r <- raster(OCIS_raster,layer=10)
-    crs(r) <- CRS("+init=epsg:4326")
-    return(r)
-  }
+getMapRaster <- function(variable, dec, variableType){
+  #decades <- seq(1960, 2005, by=1)
+  # if(variableType == "Historical"){
+  #   decades <- seq(1960, 2005, by=1)
+  # }
+  # else{
+  #   decades <- seq(2006, 2099, by=1)
+  # }
+  mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+  print(mapRaster)
+  r <- raster(mapRaster,layer=10)
+  crs(r) <- CRS("+init=epsg:4326")
+  return(r)
 }
 
 #downloadFile('OCIS')
