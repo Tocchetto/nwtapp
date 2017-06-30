@@ -52,7 +52,7 @@ var.labels <- c("Energia Potencial Disponível para Convecção"="CAPE","Fluxo d
                 "Escoamento Superficial" = "RNOF", "Escoamento Subsuperficial" = "RNSG", "Temperatura do Solo na Camada de 10-40 cm" = "TGRZ", 
                 "Temperatura do Solo na Camada de 0-10 cm" = "TGSC", "Temperatura a 2 m" = "TP2M", "Temperatura à Superfície (continente e oceano)" = "TSFC",
                 "Umidade Relativa a 2 m" = "UR2M", "Umidade do Solo na Camada de 0-10 cm" = "USSL", "Umidade do Solo na Camada de 10-40 cm" = "UZRS", 
-                "Vento a 100 m" = "W100M", "Vento a 10 m" = "W10M")
+                "Vento a 100 m" = "W100", "Vento a 10 m" = "W10M")
 # var.labels <- c("Pressão ao Nível Médio do Mar", "Pressão à Superfície", "Componente Meridional do Vento a 10 m da Superfície", 
 #                 "Componente Zonal do Vento a 10 m da Superfície", "Temperatura a 2 m da Superfície", "Temperatura Máxima", 
 #                 "Temperatura Mínima", "Temperatura do Ponto de Orvalho", "Componente Zonal do Vento a 100 m da Superfície", 

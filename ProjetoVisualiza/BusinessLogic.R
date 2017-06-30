@@ -39,14 +39,18 @@ fDate <- format(fDate, '%Y%m%d')
 
 #Functions
 getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
-  if(variable == "Temperatura Máxima")return(" °C")
-  if(variable == "Temperatura Mínima")return(" °C")
-  if(variable == "Temperatura do Ponto de Orvalho")return(" °C")
-  if(variable == "Temperatura Absoluta")return(" °C")
-  if(variable == "Temperatura a 2 m da Superfície")return(" °C")
-  if(variable == "Temperatura à Superfície")return(" °C")
-  if(variable == "Temperatura do Solo na Camada de 0-10 cm da Superfície")return(" °C")
-  if(variable == "Temperatura do Solo na Camada de 10-40 cm da Superfície")return(" °C")
+  print(variable)
+  if(variable == "CAPE")return(" J/kg")
+  if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF")return(" W/m2")
+  if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
+     variable == "PREC")return(" mm/ano")
+  if(variable == "PSLC" || variable == "PSLM")return(" hPa")
+  if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
+     variable == "MXTP" || variable == "MNTP")return(" °C")
+  if(variable == "USSL" || variable == "UZRS" || variable == "MDNV" || variable == "LWNV" || variable == "HINV")return(" 0-1")
+  if(variable == "UZRS")return(" %")
+  if(variable == "W100" || variable == "W10M")return(" m/s")
+  if(variable == "D100" || variable == "D10M")return(" graus meteorológicos")
 }
 
 getMapRaster <- function(variable, dec, variableType){
@@ -62,6 +66,15 @@ getMapRaster <- function(variable, dec, variableType){
   r <- raster(mapRaster,layer=10)
   crs(r) <- CRS("+init=epsg:4326")
   return(r)
+}
+
+getMapPal <- function(variable, dec, variableType){
+  mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+  print(mapRaster)
+  r <- raster(mapRaster,layer=10)
+  pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
+                      na.color = "transparent")
+  return(pal)
 }
 
 #downloadFile('OCIS')

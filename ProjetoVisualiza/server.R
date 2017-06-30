@@ -28,6 +28,7 @@ shinyServer(function(input, output, session) {
   })
   # Initialize map
   output$Map <- renderLeaflet({
+    pal = getMapPal(input$variable, input$dec, input$variableType)
     rasterToPlot = getMapRaster(input$variable, input$dec, input$variableType)
     leaflet() %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
       addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
