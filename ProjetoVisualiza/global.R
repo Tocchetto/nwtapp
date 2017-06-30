@@ -22,8 +22,8 @@ countries <- readOGR("countries.geojson", "OGRGeoJSON")
 mapRaster <- 'Tifs/Eta_MIROC5/Eta_MIROC5_20_Historical_climate_annually_CAPE_19890101_0000_v1.tif'
 print(getwd())
 r <- raster(mapRaster,layer=10) #raster("nc/oisst-sst.nc")
- pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
-                     na.color = "transparent")
+# pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
+#                     na.color = "transparent")
 
 decades <- seq(1960, 2005, by=1)
 lon = -53.9010478

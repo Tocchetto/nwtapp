@@ -27,18 +27,22 @@ shinyServer(function(input, output, session) {
       decades <- seq(1960, 2005, by=1)
     }
     updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
-
-    pal = getMapPal(input$variable, input$dec, input$variableType)
-    legendSuffix = getSuffix(input$variable)
-    rasterToPlot = getMapRaster(input$variable, input$dec, input$variableType)
     
-    leaflet() %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
-      addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
-      addLegend("bottomleft", pal = pal, values = values(rasterToPlot),
-                          title = input$variable,
-                          labFormat = labelFormat(suffix = legendSuffix),
-                          opacity = 1
-                )
+    variable = input$variable
+    dec = input$dec
+    variableType = input$variableType
+    
+    if(variableType == "Historical" && dec < 2006 || variableType == "RCP4.5" && dec > 2005 || variableType == "RCP8.5" && dec > 2005 ){
+      pal = getMapPal(variable, dec, variableType)
+      rasterToPlot = getMapRaster(variable, dec, variableType)
+      leaflet() %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
+        addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
+        addLegend("bottomleft", pal = pal, values = values(rasterToPlot),
+                            title = variable,
+                            labFormat = labelFormat(suffix = getSuffix(variable)),
+                            opacity = 1
+                  )
+    }
   })
   # output$rasterDownload <- downloadHandler(
   #   filename="raster.tif",
