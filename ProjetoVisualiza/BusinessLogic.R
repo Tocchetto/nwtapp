@@ -38,7 +38,7 @@ fDate <- format(fDate, '%Y%m%d')
 #OCIS_raster = rasterFromXYZ(OCIS[-75351,])
 
 #Functions
-getPrefix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
+getSuffix <- function(variable){ #Tem que ver certinho as unidades de cada valor (pressão, velocidade do vento, altura...)
   print(variable)
   if(variable == "CAPE")return(" J/kg")
   if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || 
@@ -62,65 +62,72 @@ getMapRaster <- function(variable, dec, variableType){
   # else{
   #   decades <- seq(2006, 2099, by=1)
   # }
-  mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-  print(mapRaster)
-  r <- raster(mapRaster,layer=10)
-  crs(r) <- CRS("+init=epsg:4326")
-  return(r)
+  if(file.exists('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif')){
+    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+    r <- raster(mapRaster,layer=10)
+    crs(r) <- CRS("+init=epsg:4326")
+    return(r)
+  }else{
+    print("File does not exists")
+    return(r)
+  }
+  #print(mapRaster)
 }
 
 getMapPal <- function(variable, dec, variableType){
-  if(variable == "MDNV" || variable == "LWNV" || variable == "HINV"){
-    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print(mapRaster)
-    r <- raster(mapRaster,layer=10)
-    pal <- colorNumeric(c("#066867", "#31BFC1", "#78D0DC", "#ACE0EB", "#FDDEBF", "#FBAA6B", "#CF6028", "#5E260F"), values(r),
-                        na.color = "transparent")
-    return(pal)
-  }
-  if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
-     variable == "PREC"){
+  if(file.exists('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif')){
+    if(variable == "MDNV" || variable == "LWNV" || variable == "HINV"){
       mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-      print(mapRaster)
       r <- raster(mapRaster,layer=10)
-      pal <- colorNumeric(c("#FEFBDE", "#E4F1FA", "#CCFFFF", "#99FFFF", "#66CCCC", "#66CCCC"), values(r),
+      pal <- colorNumeric(c("#066867", "#31BFC1", "#78D0DC", "#ACE0EB", "#FDDEBF", "#FBAA6B", "#CF6028", "#5E260F"), values(r),
                           na.color = "transparent")
       return(pal)
-  }
-  if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || variable == "OLES" || 
-     variable == "OLIS"){
-       mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-       print(mapRaster)
-       r <- raster(mapRaster,layer=10)
-       pal <- colorNumeric(c("#9999CC", "#9999CC", "#9966CC", "#9966CC", "#9966CC", "#663399"), values(r),
-                           na.color = "transparent")
-       return(pal)
-   }
-  if(variable == "W100" || variable == "W10M" || variable == "D10M" || variable == "D100"){
-    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print(mapRaster)
-    r <- raster(mapRaster,layer=10)
-    pal <- colorNumeric(c("#6699FF", "#66FF99", "#FFFF99", "#FFCC66", "#FF0000", "#990099"), values(r),
-                        na.color = "transparent")
-    return(pal)
-  }
-  if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
-     variable == "MXTP" || variable == "MNTP"){
-    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print(mapRaster)
-    r <- raster(mapRaster,layer=10)
-    pal <- colorNumeric(c("#FFFFFF", "#E1F6FB", "#BCEEFB", "#B9ECD8", "#CADB92", "#FFEB88", "#FBC25E", "#FF9933", 
-                          "#FF7B33", "#CD5B12", "#FF3C1C"), values(r),
-                        na.color = "transparent")
-    return(pal)
-  }
-  else{
-    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print(mapRaster)
+    }
+    if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
+       variable == "PREC"){
+        mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+        r <- raster(mapRaster,layer=10)
+        pal <- colorNumeric(c("#FEFBDE", "#E4F1FA", "#CCFFFF", "#99FFFF", "#66CCCC", "#66CCCC"), values(r),
+                            na.color = "transparent")
+        return(pal)
+    }
+    if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || variable == "OLES" || 
+       variable == "OLIS"){
+         mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+         r <- raster(mapRaster,layer=10)
+         pal <- colorNumeric(c("#9999CC", "#9999CC", "#9966CC", "#9966CC", "#9966CC", "#663399"), values(r),
+                             na.color = "transparent")
+         return(pal)
+     }
+    if(variable == "W100" || variable == "W10M" || variable == "D10M" || variable == "D100"){
+      mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+      r <- raster(mapRaster,layer=10)
+      pal <- colorNumeric(c("#6699FF", "#66FF99", "#FFFF99", "#FFCC66", "#FF0000", "#990099"), values(r),
+                          na.color = "transparent")
+      return(pal)
+    }
+    if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
+       variable == "MXTP" || variable == "MNTP"){
+      mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+      r <- raster(mapRaster,layer=10)
+      pal <- colorNumeric(c("#FFFFFF", "#E1F6FB", "#BCEEFB", "#B9ECD8", "#CADB92", "#FFEB88", "#FBC25E", "#FF9933", 
+                            "#FF7B33", "#CD5B12", "#FF3C1C"), values(r),
+                          na.color = "transparent")
+      return(pal)
+    }
+    else{
+      mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+      r <- raster(mapRaster)
+      pal <- colorNumeric(c("#ffffff", "#000000"), values(r),
+                          na.color = "transparent")
+      return(pal)
+    }
+  }else{
+    mapRaster <- 'Tifs/Eta_MIROC5/Eta_MIROC5_20_Historical_climate_annually_CAPE_19890101_0000_v1.tif'
     r <- raster(mapRaster)
     pal <- colorNumeric(c("#ffffff", "#000000"), values(r),
                         na.color = "transparent")
-    return(pal)
+    #return(pal)
   }
 }
 

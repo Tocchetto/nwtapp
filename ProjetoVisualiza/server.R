@@ -18,23 +18,25 @@ shinyServer(function(input, output, session) {
   #     decades <- seq(2006, 2099, by=1)
   #   }
   # })
-  observe({
+  # Initialize map
+  output$Map <- renderLeaflet({
+    #Mudança de Tipo de Dado
     if(input$variableType != "Historical"){
       decades <- seq(2006, 2099, by=1)
     }else{
       decades <- seq(1960, 2005, by=1)
     }
     updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
-  })
-  # Initialize map
-  output$Map <- renderLeaflet({
+
     pal = getMapPal(input$variable, input$dec, input$variableType)
+    legendSuffix = getSuffix(input$variable)
     rasterToPlot = getMapRaster(input$variable, input$dec, input$variableType)
+    
     leaflet() %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
       addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
       addLegend("bottomleft", pal = pal, values = values(rasterToPlot),
                           title = input$variable,
-                          labFormat = labelFormat(suffix = getPrefix(input$variable)),
+                          labFormat = labelFormat(suffix = legendSuffix),
                           opacity = 1
                 )
   })
