@@ -19,18 +19,21 @@ shinyServer(function(input, output, session) {
   #   }
   # })
   # Initialize map
+  
   output$Map <- renderLeaflet({
-    #Mudança de Tipo de Dado
-    if(input$variableType != "Historical"){
-      decades <- seq(2006, 2099, by=1)
-    }else{
-      decades <- seq(1960, 2005, by=1)
-    }
-    updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
-    
     variable = input$variable
     dec = input$dec
     variableType = input$variableType
+    
+    #Mudança de Tipo de Dado
+    if(variableType == "Historical" && dec > 2005){
+      decades <- seq(1961, 2005, by=1)
+      updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
+    }
+    if(variableType != "Historical" && dec < 2006){
+      decades <- seq(2006, 2099, by=1)
+      updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
+    }
     
     if(variableType == "Historical" && dec < 2006 || variableType == "RCP4.5" && dec > 2005 || variableType == "RCP8.5" && dec > 2005 ){
       pal = getMapPal(variable, dec, variableType)

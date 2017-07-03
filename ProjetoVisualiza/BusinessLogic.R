@@ -24,6 +24,7 @@ generateDF <- function(cData, curDate, fDate){
   #file.remove(fileName)
   return(cptec_t)
 }
+
 date <- Sys.Date()-1 # dia atual / data do sistema
 curDate <- format(date, '%Y%m%d')
 dateString <- format(date, '%Y/%m/%d')

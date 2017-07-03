@@ -25,7 +25,7 @@ r <- raster(mapRaster,layer=10) #raster("nc/oisst-sst.nc")
 # pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
 #                     na.color = "transparent")
 
-decades <- seq(1960, 2005, by=1)
+decades <- seq(1961, 2005, by=1)
 lon = -53.9010478
 lat = -14.940753
 #Month vai receber a abreviação de todos os meses do ano, executar: month.abb para ver
