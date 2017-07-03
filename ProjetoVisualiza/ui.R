@@ -30,11 +30,11 @@ shinyUI(bootstrapPage(
                                radioButtons("variableType", "Tipo do Dado", choices = list("Historical", "RCP4.5", "RCP8.5"), selected = "Historical", inline = TRUE)
                         )
                       ),
-                      fluidRow(
-                        column(12,
-                               selectInput("location", "Cidades/Aeroportos", choices = cities.labels, selected="", width="100%")
-                        )
-                      ),
+                      # fluidRow(
+                      #   column(12,
+                      #          selectInput("location", "Cidades/Aeroportos", choices = cities.labels, selected="", width="100%")
+                      #   )
+                      # ),
                       fluidRow(
                         column(6,
                                actionButton("btn_modal_shp", "Upload shapefile", class="btn-block"),
