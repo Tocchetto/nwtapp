@@ -47,12 +47,12 @@ shinyServer(function(input, output, session) {
                   )
     }
   })
-  # output$rasterDownload <- downloadHandler(
-  #   filename="raster.tif",
-  #   content=function(file){
-  #     writeRaster(rasterToPlot, file, format="GTiff", overwrite=TRUE)
-  #   }
-  # )
+  output$rasterDownload <- downloadHandler(
+    filename="raster.tif",
+    content=function(file){
+      writeRaster(getMapRaster(input$variable, input$dec, input$variableType), file, format="GTiff", overwrite=TRUE)
+    }
+  )
   
   shp <- callModule(shpPoly, "user_shapefile", r=r)
   
