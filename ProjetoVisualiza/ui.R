@@ -36,11 +36,25 @@ shinyUI(bootstrapPage(
                       #   )
                       # ),
                       fluidRow(
-                        column(6,
-                               actionButton("btn_modal_shp", "Upload shapefile", class="btn-block"),
-                               uiOutput("Shp_On")
-                        ),
-                        column(6, 
+                      column(12,
+                             fileInput('user_input', 'Upload ShapeFile',
+                                        accept=c('shp/zip', 
+                                                 '.shp', 
+                                                 '.zip')) #accept=c('.shp','.dbf','.sbn','.sbx','.shx',".prj"), multiple=TRUE
+                            ),
+                            uiOutput("user_shp")
+                      ),
+                      fluidRow(
+                        column(12, 
+                               actionButton("applyShape", "Apply Uploaded Shape", class="btn-block")
+                        )
+                      ),
+                      fluidRow(
+                        # column(6,
+                        #        actionButton("uploadShape", "Upload shapefile", class="btn-block"),
+                        #        uiOutput("Shp_On")
+                        # ),
+                        column(12, 
                                downloadButton("rasterDownload", "Get Map (.tif)", class="btn-block")
                         )
                       )
