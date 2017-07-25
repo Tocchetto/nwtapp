@@ -1,6 +1,19 @@
 source("./BusinessLogic.R")
 shinyServer(function(input, output, session) {
   
+  observeEvent(input$user_input,{
+    inFile <- input$user_input
+    print(inFile$datapath)
+    shape <- readOGR(inFile$datapath)
+    print(shape)
+    
+    # leaflet() %>%
+    #   addPolygons(
+    #     data = inFile$datapath, 
+    #     stroke = TRUE, fillOpacity = 0.5, smoothFactor = 0.5,
+    #     color = "black")
+  })
+  
   # Initialize map
   output$Map <- renderLeaflet({
     variable = input$variable
@@ -29,6 +42,7 @@ shinyServer(function(input, output, session) {
                   )
     }
   })
+  
   output$rasterDownload <- downloadHandler(
     filename="raster.tif",
     content=function(file){
