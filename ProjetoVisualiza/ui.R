@@ -37,10 +37,7 @@ shinyUI(bootstrapPage(
                       # ),
                       fluidRow(
                       column(12,
-                             fileInput('user_input', 'Upload ShapeFile',
-                                        accept=c('shp/zip', 
-                                                 '.shp', 
-                                                 '.zip')) #accept=c('.shp','.dbf','.sbn','.sbx','.shx',".prj"), multiple=TRUE
+                             fileInput('user_input', 'Upload ShapeFile', multiple = TRUE) # ,accept=c('shp/zip', '.shp', '.zip') #accept=c('.shp','.dbf','.sbn','.sbx','.shx',".prj"), multiple=TRUE
                             ),
                             uiOutput("user_shp")
                       ),

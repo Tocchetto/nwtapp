@@ -2,19 +2,18 @@ source("./BusinessLogic.R")
 shinyServer(function(input, output, session) {
   
   observeEvent(input$user_input,{
-    inFile <- input$user_input
-    print(inFile$datapath)
-    shape <- readOGR(inFile$datapath)
-    print(shape)
+    unzip(input$user_input$data, exdir=tempdir())
+    print(input$file)
+    userShape <- readOGR(tempdir(), '43MUE250GC_SIR', encoding='UTF-8')
+    print(userShape)
     
-    # leaflet() %>%
-    #   addPolygons(
-    #     data = inFile$datapath, 
-    #     stroke = TRUE, fillOpacity = 0.5, smoothFactor = 0.5,
-    #     color = "black")
+    leafletProxy('Map') %>%
+     addPolygons(
+       data = userShape, 
+       stroke = TRUE, fillOpacity = 0.5, smoothFactor = 0.5,
+       color = "black")
   })
   
-  # Initialize map
   output$Map <- renderLeaflet({
     variable = input$variable
     dec = input$dec
@@ -33,7 +32,7 @@ shinyServer(function(input, output, session) {
     if(variableType == "Historical" && dec < 2006 || variableType == "RCP4.5" && dec > 2005 || variableType == "RCP8.5" && dec > 2005 ){
       pal = getMapPal(variable, dec, variableType)
       rasterToPlot = getMapRaster(variable, dec, variableType)
-      leaflet() %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
+      leaflet(Map) %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
         addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
         addLegend("bottomleft", pal = pal, values = values(rasterToPlot),
                             title = variable,
