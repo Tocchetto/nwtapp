@@ -12,7 +12,7 @@ shinyServer(function(input, output, session) {
     leafletProxy('Map') %>%
      addPolygons(
        data = userShape, 
-       stroke = TRUE, fillOpacity = 0.5, smoothFactor = 0.5,
+       stroke = TRUE, fillOpacity = 0, smoothFactor = 0.1, weight= 1.2,
        color = "black")
     
     unlink(paste(tempdir(), "/*", sep=""))
