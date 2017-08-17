@@ -2,16 +2,20 @@ source("./BusinessLogic.R")
 shinyServer(function(input, output, session) {
   
   observeEvent(input$user_input,{
-    unzip(input$user_input$data, exdir=tempdir())
-    print(input$file)
-    userShape <- readOGR(tempdir(), '43MUE250GC_SIR', encoding='UTF-8')
-    print(userShape)
+    aux = unzip(input$user_input$data, exdir=tempdir())
+    userShapeFileName = sub(pattern = "(.*)\\..*$", replacement = "\\1", basename(aux[1]))
+    print(input$user_input$name)
+    #print(input$header)
+    userShape <- readOGR(tempdir(), userShapeFileName, encoding='UTF-8')
+    #print(userShape)
     
     leafletProxy('Map') %>%
      addPolygons(
        data = userShape, 
        stroke = TRUE, fillOpacity = 0.5, smoothFactor = 0.5,
        color = "black")
+    
+    unlink(paste(tempdir(), "/*", sep=""))
   })
   
   output$Map <- renderLeaflet({
