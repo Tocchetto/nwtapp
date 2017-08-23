@@ -1,3 +1,5 @@
+#install.packages(c("leaflet", "shiny", "shinyBS", "shinyjs", "RColorBrewer", "DT", "rgdal", "raster", "data.table", "dplyr", "tidyr", "ggplot2"))
+
 library(shiny)
 library(leaflet)
 library(shinyBS)
