@@ -56,26 +56,19 @@ getSuffix <- function(variable){ #Tem que ver certinho as unidades de cada valor
 }
 
 getMapRaster <- function(variable, dec, variableType){
-  #decades <- seq(1960, 2005, by=1)
-  # if(variableType == "Historical"){
-  #   decades <- seq(1960, 2005, by=1)
-  # }
-  # else{
-  #   decades <- seq(2006, 2099, by=1)
-  # }
   mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-  print("getMapRaster")
-  print(mapRaster)
   r <- raster(mapRaster,layer=10)
   crs(r) <- CRS("+init=epsg:4326")
+  #print(coordinates(r))
+  #View(as.matrix(r))
   return(r)
 }
 
 getMapPal <- function(variable, dec, variableType){
   if(variable == "MDNV" || variable == "LWNV" || variable == "HINV"){
     mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print("getMapPal")
-    print(mapRaster)
+    #print("getMapPal")
+    #print(mapRaster)
     r <- raster(mapRaster,layer=10)
     pal <- colorNumeric(c("#066867", "#31BFC1", "#78D0DC", "#ACE0EB", "#FDDEBF", "#FBAA6B", "#CF6028", "#5E260F"), values(r),
                         na.color = "transparent")
@@ -83,28 +76,28 @@ getMapPal <- function(variable, dec, variableType){
   }
   if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
      variable == "PREC"){
-      mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-      print("getMapPal")
-      print(mapRaster)
-      r <- raster(mapRaster,layer=10)
-      pal <- colorNumeric(c("#FEFBDE", "#E4F1FA", "#CCFFFF", "#99FFFF", "#66CCCC", "#66CCCC"), values(r),
-                          na.color = "transparent")
-      return(pal)
+    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+    #print("getMapPal")
+    #print(mapRaster)
+    r <- raster(mapRaster,layer=10)
+    pal <- colorNumeric(c("#FEFBDE", "#E4F1FA", "#CCFFFF", "#99FFFF", "#66CCCC", "#66CCCC"), values(r),
+                        na.color = "transparent")
+    return(pal)
   }
   if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || variable == "OLES" || 
      variable == "OLIS"){
-       mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-       print("getMapPal")
-       print(mapRaster)
-       r <- raster(mapRaster,layer=10)
-       pal <- colorNumeric(c("#9999CC", "#9999CC", "#9966CC", "#9966CC", "#9966CC", "#663399"), values(r),
-                           na.color = "transparent")
-       return(pal)
-   }
+    mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
+    #print("getMapPal")
+    #print(mapRaster)
+    r <- raster(mapRaster,layer=10)
+    pal <- colorNumeric(c("#9999CC", "#9999CC", "#9966CC", "#9966CC", "#9966CC", "#663399"), values(r),
+                        na.color = "transparent")
+    return(pal)
+  }
   if(variable == "W100" || variable == "W10M" || variable == "D10M" || variable == "D100"){
     mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print("getMapPal")
-    print(mapRaster)
+    #print("getMapPal")
+    #print(mapRaster)
     r <- raster(mapRaster,layer=10)
     pal <- colorNumeric(c("#6699FF", "#66FF99", "#FFFF99", "#FFCC66", "#FF0000", "#990099"), values(r),
                         na.color = "transparent")
@@ -113,23 +106,67 @@ getMapPal <- function(variable, dec, variableType){
   if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
      variable == "MXTP" || variable == "MNTP"){
     mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print("getMapPal")
-    print(mapRaster)
+    #print("getMapPal")
+    #print(mapRaster)
     r <- raster(mapRaster,layer=10)
-    pal <- colorNumeric(c("#FFFFFF", "#E1F6FB", "#BCEEFB", "#B9ECD8", "#CADB92", "#FFEB88", "#FBC25E", "#FF9933", 
-                          "#FF7B33", "#CD5B12", "#FF3C1C"), values(r),
+    pal <- colorNumeric(c("#E2F2FA", "#BCEEFB", "#BCEEFB", "#B9ECD8", "#CADB92", "#FFEB88", "#FBC25E", "#FF7B33", 
+                          "#CD5B12", "#FF3C1C", "#663399"), c(-5,0,5,10,15,20,25,30,35,40,45),
                         na.color = "transparent")
     return(pal)
   }
   else{
     mapRaster <- paste('Tifs/Eta_MIROC5/Eta_MIROC5_20_',variableType,'_climate_annually_',variable,'_', dec, '0101_0000_v1.tif', sep = "")
-    print("getMapPal")
-    print(mapRaster)
+    #print("getMapPal")
+    #print(mapRaster)
     r <- raster(mapRaster)
     pal <- colorNumeric(c("#ffffff", "#000000"), values(r),
                         na.color = "transparent")
     return(pal)
   }
+}
+
+getUserShapeColor <- function(variable){
+  if(variable == "MDNV" || variable == "LWNV" || variable == "HINV"){
+    return(c("#066867", "#31BFC1", "#78D0DC", "#ACE0EB", "#FDDEBF", "#FBAA6B", "#CF6028", "#5E260F"))
+  }
+  if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
+     variable == "PREC"){
+    return(c("#FEFBDE", "#E4F1FA", "#CCFFFF", "#99FFFF", "#66CCCC", "#66CCCC"))
+  }
+  if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || variable == "OLES" || 
+     variable == "OLIS"){
+    return(c("#9999CC", "#9999CC", "#9966CC", "#9966CC", "#9966CC", "#663399"))
+  }
+  if(variable == "W100" || variable == "W10M" || variable == "D10M" || variable == "D100"){
+    return(c("#6699FF", "#66FF99", "#FFFF99", "#FFCC66", "#FF0000", "#990099"))
+  }
+  if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
+     variable == "MXTP" || variable == "MNTP"){
+    return(c("#E2F2FA", "#BCEEFB", "#BCEEFB", "#B9ECD8", "#CADB92", "#FFEB88", "#FBC25E", "#FF7B33", 
+             "#CD5B12", "#FF3C1C", "#663399"))
+  }
+  else{
+    return(c("#ffffff", "#000000"))
+  }
+}
+
+getShapeValues <- function(variable){
+  if(variable == "MDNV" || variable == "LWNV" || variable == "HINV"){
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))
+  }
+  if(variable == "RNSG" || variable == "RNOF" || variable == "EVTP" || variable == "EVPP" || variable == "NEVE" || 
+     variable == "PREC"){
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))  }
+  if(variable == "CLSF" || variable == "GHFL" || variable == "CSSF" || variable == "OCES" || variable == "OCIS" || variable == "OLES" || 
+     variable == "OLIS"){
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))  }
+  if(variable == "W100" || variable == "W10M" || variable == "D10M" || variable == "D100"){
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))  }
+  if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
+     variable == "MXTP" || variable == "MNTP"){
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))  }
+  else{
+    return(c(-5,0,5,10,15,20,25,30,35,40,45))  }
 }
 
 #downloadFile('OCIS')
