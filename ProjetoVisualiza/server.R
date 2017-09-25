@@ -37,12 +37,12 @@ shinyServer(function(input, output, session) {
     print(getShapeValues(variable))
     #print(brks)
     #print(colors[findInterval(variavel, brks,all.inside=TRUE)])
-    leafletProxy('Map') %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>% addRectangles(
+    leafletProxy('Map') %>% addTiles() %>% addRectangles(
       lng1=lon-0.098, lat1=lat-0.098,
       lng2=lon+0.098, lat2=lat+0.098,
       color=colors[findInterval(variavel, brks,all.inside=TRUE)],
-      weight = 0.5,
-      opacity = 1)
+      weight = 0,
+      opacity = 0.8)
     
     # leafletProxy('Map') %>%
     #  addPolygons(
@@ -68,17 +68,19 @@ shinyServer(function(input, output, session) {
       decades <- seq(2006, 2099, by=1)
       updateSliderInput(session, "dec", "Década", min=min(decades), max=max(decades), value=max(decades), step=1)
     }
-
-      #if(variableType == "Historical" && dec < 2006 || variableType == "RCP4.5" && dec > 2005 || variableType == "RCP8.5" && dec > 2005 ){
-      pal = getMapPal(variable, dec, variableType)
-      rasterToPlot = getMapRaster(variable, dec, variableType)
-      leaflet(Map) %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
-        addRasterImage(rasterToPlot, colors = pal, opacity = 0.8) %>% #Fazer função getRaster
-        addLegend("bottomleft", pal = pal, values = getUserShapeValues(variable),
-                  title = variable,
-                  labFormat = labelFormat(suffix = getSuffix(variable)),
-                  opacity = 1
-        )
+      #Sem esse if ao trocar o "variableType" vai aparecer um errinho, ele previne isso
+      if(variableType == "Historical" && dec < 2006 || variableType == "RCP4.5" && dec > 2005 || variableType == "RCP8.5" && dec > 2005 ){
+        rasterToPlot = getMapRaster(variable, dec, variableType)
+        leaflet(Map) %>% addTiles() %>% setView(lng = -60.316671, lat = -15.377004, zoom = 4) %>%
+          addRasterImage(rasterToPlot, colors = getUserShapeColor(variable), opacity = 0.8) %>% #Fazer função getRaster
+          addLegend("bottomleft", pal = colorNumeric(getUserShapeColor(variable), getShapeValues(variable)), values = getShapeValues(variable),
+                    title = variable,
+                    labels = getShapeValues(variable),
+                    #bins = getShapeValues(variable),
+                    labFormat = labelFormat(suffix = getSuffix(variable)),
+                    opacity = 1
+          )
+      }
   })
   
   output$rasterDownload <- downloadHandler(
