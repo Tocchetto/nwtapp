@@ -2,26 +2,20 @@
 
 library(shiny)
 library(leaflet)
-#library(shinyBS)
-#library(shinyjs)
-#library(RColorBrewer)
-library(DT) #p
-library(rgdal) #p
-library(raster)
-#library(data.table)
-#library(dplyr)
-#library(tidyr)
-library(ggplot2) #p
-
-require(sp)
-require(maps)
+library(shinyBS)
+library(shinyjs)
 library(RColorBrewer)
-library(classInt)
-library(spatialEco)
+library(DT)
+library(rgdal)
+library(raster)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 
 source("mod_shpPoly.R")
 #Exemplo https://rstudio.github.io/leaflet/legends.html
-#countries <- readOGR("countries.geojson", "OGRGeoJSON")
+countries <- readOGR("countries.geojson", "OGRGeoJSON")
 # pal <- colorNumeric(
 #   palette = "YlGnBu",
 #   domain = countries$gdp_md_est
@@ -29,7 +23,7 @@ source("mod_shpPoly.R")
 
 mapRaster <- 'Tifs/Eta_MIROC5/Eta_MIROC5_20_Historical_climate_annually_CAPE_19890101_0000_v1.tif'
 print(getwd())
-#r <- raster(mapRaster,layer=10) #raster("nc/oisst-sst.nc")
+r <- raster(mapRaster,layer=10) #raster("nc/oisst-sst.nc")
 # pal <- colorNumeric(c("#0C2C84", "#41B6C4", "#FFFFCC"), values(r),
 #                     na.color = "transparent")
 
