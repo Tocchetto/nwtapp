@@ -12,10 +12,11 @@ library(data.table)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(classInt)
 
 source("mod_shpPoly.R")
 #Exemplo https://rstudio.github.io/leaflet/legends.html
-countries <- readOGR("countries.geojson", "OGRGeoJSON")
+#countries <- readOGR("countries.geojson", "OGRGeoJSON")
 # pal <- colorNumeric(
 #   palette = "YlGnBu",
 #   domain = countries$gdp_md_est

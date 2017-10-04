@@ -30,6 +30,7 @@ shinyServer(function(input, output, session) {
     #print(colorNumeric(getUserShapeColor(variable), getShapeValues(variable)))
     brks<-classIntervals(variavel, n=length(colors), style="quantile")
     brks<- brks$brks #plot the map
+    print(brks)
     
     leafletProxy('Map') %>% clearControls() %>% addTiles() %>% addRectangles(
       lng1=lon-0.098, lat1=lat-0.098,
