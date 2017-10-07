@@ -37,7 +37,8 @@ shinyServer(function(input, output, session) {
       lng2=lon+0.098, lat2=lat+0.098,
       color=colors[findInterval(variavel, brks,all.inside=TRUE)],
       weight = 0,
-      opacity = 0.8) %>%
+      opacity = 1,
+      fillOpacity = 0.5) %>%
     addLegend("bottomleft", pal = colorNumeric(colors, brks,na.color = "transparent"),
                             values = brks,
                             title = variable,
