@@ -7,7 +7,7 @@ getSuffix <- function(variable){
      variable == "PREC")return(" mm/ano")
   if(variable == "PSLC" || variable == "PSLM")return(" hPa")
   if(variable == "TP2M" || variable == "TSFC" || variable == "DP2M" || variable == "TGSC" || variable == "TGRZ" || 
-     variable == "MXTP" || variable == "MNTP")return(" Â°C")
+     variable == "MXTP" || variable == "MNTP")return(" °C")
   if(variable == "USSL" || variable == "UZRS" || variable == "MDNV" || variable == "LWNV" || variable == "HINV")return(" 0-1")
   if(variable == "UZRS")return(" %")
   if(variable == "W100" || variable == "W10M")return(" m/s")
