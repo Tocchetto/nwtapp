@@ -28,7 +28,7 @@ shinyUI(bootstrapPage(
                       ),
                       fluidRow(
                         column(12, 
-                               downloadButton("rasterDownload", "Get Map (.tif)", class="btn-block")
+                               downloadButton("rasterDownload", "Download do Mapa (.Tif)", class="btn-block")
                         )
                       )
                     ))
